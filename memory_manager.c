@@ -97,7 +97,7 @@ void mem_free(void* block) {
     while (current != NULL) {
         // Check if this block corresponds to the provided pointer
         if (current->ptr == block) {
-            // Check if the next block is free and can be coalesced
+            // Check if the next block is free and can be coalesced(ihopsatt)
             if (current->next != NULL && current->next->is_free == 1) {
                 struct Mblock* next = current->next; // Next block
                 current->next = next->next; // Bypass the next block
