@@ -4,12 +4,16 @@
 
 #include <stdint.h>
 #include "memory_manager.h"
+#include <pthread.h>
 
 // Node structure 
 typedef struct Node {
     uint16_t data;
     struct Node* next;
 } Node;
+
+// Declare a mutex for thread safety
+extern pthread_mutex_t list_lock;  // Declare it as extern
 
 // Declare functions
 void list_init(Node** head, size_t size);
@@ -23,4 +27,4 @@ void list_display_range(Node** head, Node* start_node, Node* end_node);
 int list_count_nodes(Node** head);
 void list_cleanup(Node** head);
 
-#endif
+#endif // LINKED_LIST_H

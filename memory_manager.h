@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
+#include <pthread.h>
 
 typedef struct Mblock {
     void* ptr;               // Pointer to the memory allocated
@@ -13,6 +14,9 @@ typedef struct Mblock {
     struct Mblock *next;   // Pointer to the next block
     int is_free;                // Is this block free? (1 for true, 0 for false)
 } Mblock;
+
+// Declare the mutex for the memory manager
+extern pthread_mutex_t list_lock;
 
 //declare functions
 void mem_init(size_t size);
