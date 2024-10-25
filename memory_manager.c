@@ -142,7 +142,7 @@ void mem_free(void* block) {
 
             // Unlock mutex before exit
             pthread_mutex_unlock(&memory_lock);
-            return; // Exit the function
+            return;
         }
         previous = current;
         current = current->next; // Move to the next block
