@@ -218,7 +218,7 @@ void mem_deinit() {
         printf("Memory pool is already deinitialized.\n");
         // Unlock mutex before return
         pthread_mutex_unlock(&memory_lock);
-    return; // Early return since there's nothing to deinitialize
+        return; // Early return since there's nothing to deinitialize
     }
 
     // Free all headers
@@ -228,10 +228,10 @@ void mem_deinit() {
         free(current);  // Free the memory allocated for the current block header
         current = next; // Move to the next block header
     }
-    heap_header = NULL; // Reset the header pointer to NULL after freeing all headers
-
     // Free the main memory pool
     free(heap);
+
+    heap_header = NULL; // Reset the header pointer to NULL after freeing all headers
     heap = NULL; // Set pointer to NULL to avoid dangling references
 
     // Unlock mutex when deinit done
