@@ -128,15 +128,15 @@ void mem_free(void* block) {
             // Check if the next block is free and can be coalesced(ihopsatt)
             if (current->next != NULL && current->next->is_free == 1) {
                 struct Mblock* next = current->next; // Next block
-                current->size += next->size; // Increase size by the size of the next block
                 current->next = next->next; // Bypass the next block
+                current->size += next->size; // Increase size by the size of the next block
                 free(next);
             }
             
             // Check if the previous block is free and can be coalesced(ihopsatt)
             if (previous != NULL && previous->is_free == 1) {
-                previous->size += current->size;
-                previous->next = current->next;
+                previous->next = current->next;// Bypass the next block
+                previous->size += current->size;// Increase size by the size of the previous block
                 free(current);
             }
 
