@@ -151,7 +151,7 @@ void list_insert_before(Node** head, Node* next_node, uint16_t data){
 *
 *Removes a node with the specified data from the linked list.
 */
-void list_delete(Node** head, uint16_t data){
+void list_delete(Node** head, uint16_t data) {
     // Lock list to prevent other threads from inserting or deleting nodes
     pthread_mutex_lock(&list_lock);
 
@@ -164,38 +164,37 @@ void list_delete(Node** head, uint16_t data){
     }
 
     Node* current = *head; // Start from the head node
-    Node* prev = NULL;  // Initialize a pointer to track the previous node
+    Node* prev = NULL; // Initialize a pointer to track the previous node
 
-    // If the node to be deleted is the head
-    if (current != NULL && current->data == data) {
-        *head = current->next; // Update head to point to the next node
-        mem_free(current); // Free the memory of the old head node 
-        // Unlock before return
-        pthread_mutex_unlock(&list_lock);
-        return;
-    }
+    while (current != NULL) {
+        // If the node to be deleted is the head
+        if (prev == NULL && current->data == data) {
+            *head = current->next; // Update head to point to the next node
+            mem_free(current); // Free the memory of the old head node
+            pthread_mutex_unlock(&list_lock); // Unlock before return
+            return;
+        }
 
-    // Search for the node to be deleted
-    while (current != NULL && current->data != data) {
+        // If current node's data matches the target
+        if (current->data == data) {
+            prev->next = current->next; // Bypass the node to be deleted
+            mem_free(current); // Free the memory of the node
+            pthread_mutex_unlock(&list_lock); // Unlock after deletion
+            return;
+        }
+
+        // Update previous and current pointers for next iteration
         prev = current; // Track the previous node
         current = current->next; // Move to the next node
     }
 
     // Node not found
-    if (current == NULL) {
-        printf("Error: Node with data %u not found.\n", data);
-        // Unlock before return
-        pthread_mutex_unlock(&list_lock);
-        return;
-    }
-
-    // Unlink the node from the list and free its memory
-    prev->next = current->next; // Bypass the node to be deleted
-    mem_free(current);          // Free the memory of the node
-
-    // Unlock list after deletion
+    printf("Error: Node with data %u not found.\n", data);
+    
+    // Unlock list
     pthread_mutex_unlock(&list_lock);
 }
+
 
 /*Search function
 *
