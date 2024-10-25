@@ -316,7 +316,8 @@ void list_cleanup(Node** head){
     }
 
     *head = NULL;  // Reset the head pointer to NULL after cleanup
-    mem_deinit();
+    mem_deinit(); //  Final Clean up/ Reset State
+
     // Unlock list after cleanup
     pthread_mutex_unlock(&list_lock); 
 }
