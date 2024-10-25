@@ -183,7 +183,7 @@ void list_delete(Node** head, uint16_t data) {
             return;
         }
 
-        // Update previous and current pointers for next iteration
+        // Update previous and current pointers
         prev = current; // Track the previous node
         current = current->next; // Move to the next node
     }
@@ -194,7 +194,6 @@ void list_delete(Node** head, uint16_t data) {
     // Unlock list
     pthread_mutex_unlock(&list_lock);
 }
-
 
 /*Search function
 *
@@ -317,7 +316,7 @@ void list_cleanup(Node** head){
     }
 
     *head = NULL;  // Reset the head pointer to NULL after cleanup
-
+    mem_deinit();
     // Unlock list after cleanup
     pthread_mutex_unlock(&list_lock); 
 }
