@@ -221,10 +221,6 @@ void mem_deinit() {
     return; // Early return since there's nothing to deinitialize
     }
 
-    // Free the main memory pool
-    free(heap);
-    heap = NULL; // Set pointer to NULL to avoid dangling references
-
     // Free all headers
     Mblock* current = heap_header; // Start from first
     while (current != NULL) {
@@ -233,6 +229,10 @@ void mem_deinit() {
         current = next; // Move to the next block header
     }
     heap_header = NULL; // Reset the header pointer to NULL after freeing all headers
+
+    // Free the main memory pool
+    free(heap);
+    heap = NULL; // Set pointer to NULL to avoid dangling references
 
     // Unlock mutex when deinit done
     pthread_mutex_unlock(&memory_lock);
