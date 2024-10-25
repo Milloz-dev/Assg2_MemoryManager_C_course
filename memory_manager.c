@@ -127,17 +127,17 @@ void mem_free(void* block) {
 
             // Check if the next block is free and can be coalesced(ihopsatt)
             if (current->next != NULL && current->next->is_free == 1) {
-                //struct Mblock* next = current->next; // Next block
-                current->size += current->next->size; // Increase size by the size of the next block
-                current->next = current->next->next; // Bypass the next block
-                // Do not free(next); — just remove from linked list
+                struct Mblock* next = current->next; // Next block
+                current->size += next->size; // Increase size by the size of the next block
+                current->next = next->next; // Bypass the next block
+                free(next);
             }
             
             // Check if the previous block is free and can be coalesced(ihopsatt)
             if (previous != NULL && previous->is_free == 1) {
                 previous->size += current->size;
                 previous->next = current->next;
-                // Do not free(current); — just link to previous block
+                free(current);
             }
 
             // Unlock mutex before exit
